@@ -1,3 +1,4 @@
 .vscode/
 __pycache__/
-request_api.txt
+test.py
+/storage_module/config/*.sql

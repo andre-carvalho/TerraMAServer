@@ -1,32 +1,37 @@
-from flask import Flask
+import os, base64
+from flask import Flask, request
 from flask_restful import reqparse, abort, Api, Resource
+from flask_cors import CORS
+from storage_module.locations_dao import LocationsDao
+from base64_module.base64_utils import B64Utils
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 api = Api(app)
-
-parser = reqparse.RequestParser()
-parser.add_argument('description', required=True, help="description cannot be blank!")
-parser.add_argument('lat', required=True, help="lat cannot be blank!")
-parser.add_argument('lng', required=True, help="lng cannot be blank!")
-parser.add_argument('datetime', required=True, help="datetime cannot be blank!")
-parser.add_argument('photo', required=True, help="photo cannot be blank!")
 
 class Locations(Resource):
     def post(self):
-        args = parser.parse_args()
-        path = '/home/andre/Projects/TerraMAServerAPI/api/request_api.txt'
-        aFile = open(path,'w')
-        aFile.write(args['description'])
-        aFile.write(args['lat'])
-        aFile.write(args['lng'])
-        aFile.write(args['datetime'])
-        aFile.write(args['photo'])
-        aFile.close()
-        return {'status':'completed'}, 200
+        json_data = request.get_json(force=True)
+        print(json_data)
+        id_photo = json_data['datetime']
+
+        try:
+            db = LocationsDao()
+            id_photo = db.storeLocation(json_data)
+        except Exception as error:
+            print(error)
+            return 500
+
+        curpath = os.path.abspath(os.curdir)
+        b64 = B64Utils(curpath, json_data['photo'])
+        b64.writeToBinary(id_photo)
+        
+        return {'status':'completed'}, 201
 
 
 api.add_resource(Locations, '/locations') # Route_1
 
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=80)
+     # app.run(host='0.0.0.0', port=5000)
+     app.run(debug=True)
