@@ -33,15 +33,27 @@ class LocationsDao:
 
         return id
  
+    def updateLocation(self, id, url_picture):
+
+        try:
+            self.db.connect()
+            self.__update(id, url_picture)
+            self.db.commit()
+
+        except BaseException as error:
+            raise error
+        finally:
+            self.db.close()
     """
         Store input data into locations table...
     """
     def __insert(self, data):
 
-        values = "VALUES ('{0}', {1}, {2}, '{3}', '{4}')".format(data['description'],data['lat'],data['lng'],data['datetime'],data['photo'])
+        values = "VALUES ('{0}', {1}, {2}, '{3}', '{4}')".format(data['description'],data['lat'],
+        data['lng'],data['datetime'],data['photo'])
 
         sql = "INSERT INTO public.locations( "
-        sql += "description, lat, lng, datetime, photo) "
+        sql += "description, lat, lng, datetime, photo_b64) "
         sql += values
         sql += " RETURNING id"
 
@@ -49,9 +61,18 @@ class LocationsDao:
 
         id_of_new_row = self.db.cur.fetchone()[0]
         return id_of_new_row
-    
 
- 
+    """
+        Store url into picture field
+    """
+    def __update(self, id, url_picture):
+
+        sql = "UPDATE public.locations "
+        sql += "SET picture='{0}' ".format(url_picture)
+        sql += "WHERE id={0}".format(id)
+
+        self.__basicExecute(sql)
+
     """
         Execute a basic SQL statement.
     """

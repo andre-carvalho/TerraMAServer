@@ -1,5 +1,5 @@
-import os, base64
-import binascii
+import os, errno, base64
+# import binascii
 from PIL import Image
 from io import BytesIO
 
@@ -7,7 +7,7 @@ from io import BytesIO
 class B64Utils():
 
    #constructor
-    def __init__(self, path, base64_string):
+    def __init__(self, path, base64_string=None):
         self.b64 = base64_string
         self.path = path
 
@@ -34,3 +34,17 @@ class B64Utils():
         output_file = open(path,'wb')
         output_file.write(b64out)
         output_file.close()
+
+    def readFromBinary(self, sufix):
+        file_ext = 'png'
+        mimetype = 'image/{0}'.format(file_ext)
+        file_name = 'image{0}.{1}'.format(sufix, file_ext)
+        path = '{0}/{1}'.format(self.path, file_name)
+        if os.path.exists(path):
+            output_file = open(path,'rb')
+            binary = output_file.read()
+            output_file.close()
+        else:
+            raise FileNotFoundError(errno.ENOENT, 'Image file not found')
+        
+        return BytesIO(binary), file_name, mimetype
