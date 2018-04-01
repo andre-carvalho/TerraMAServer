@@ -1,5 +1,5 @@
 import os, errno, base64
-# import binascii
+import fnmatch
 from PIL import Image
 from io import BytesIO
 
@@ -10,6 +10,8 @@ class B64Utils():
     def __init__(self, path, base64_string=None):
         self.b64 = base64_string
         self.path = path
+        if not os.path.exists(path):
+            os.mkdir(path)
 
     def base64Decode(self):
         """Add missing padding to string and return the decoded base64 string."""
@@ -36,15 +38,27 @@ class B64Utils():
         output_file.close()
 
     def readFromBinary(self, sufix):
-        file_ext = 'png'
-        mimetype = 'image/{0}'.format(file_ext)
-        file_name = 'image{0}.{1}'.format(sufix, file_ext)
+        file_name = mimetype = ''
+        try:
+            file_name, mimetype = self.__getFileName(sufix)
+        except FileNotFoundError as error:
+            raise error
         path = '{0}/{1}'.format(self.path, file_name)
-        if os.path.exists(path):
-            output_file = open(path,'rb')
-            binary = output_file.read()
-            output_file.close()
-        else:
+        output_file = open(path,'rb')
+        binary = output_file.read()
+        output_file.close()        
+        return BytesIO(binary), file_name, mimetype
+
+    def __getFileName(self, sufix):
+        file_pattern = 'image{0}'.format(sufix)
+        file_name = mimetype = ''
+        for file in os.listdir(self.path):
+            if fnmatch.fnmatch(file, '{0}.*'.format(file_pattern)):
+                ext = file.split('.')
+                file_name = '{0}.{1}'.format(file_pattern, ext[1])
+                mimetype = 'image/{0}'.format(ext[1])
+                break
+        if file_name == '':
             raise FileNotFoundError(errno.ENOENT, 'Image file not found')
         
-        return BytesIO(binary), file_name, mimetype
+        return file_name, mimetype

@@ -6,6 +6,7 @@ from storage_module.locations_dao import LocationsDao
 from base64_module.base64_utils import B64Utils
 
 SERVER_IP='192.168.1.11'
+IMG_PATH='/uploadImages'
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -23,7 +24,7 @@ class Locations(Resource):
             print(error)
             return 500
 
-        curpath = os.path.abspath(os.curdir)
+        curpath = os.path.abspath(os.curdir) + IMG_PATH
         b64 = B64Utils(curpath, json_data['photo'])
         b64.writeToBinary(id_photo)
         
@@ -32,7 +33,7 @@ class Locations(Resource):
 class LocationsList(Resource):
      def get(self, location_id):
         
-        curpath = os.path.abspath(os.curdir)
+        curpath = os.path.abspath(os.curdir) + IMG_PATH
         b64 = B64Utils(curpath)
         try:
             imageio,attach,mime = b64.readFromBinary(location_id)
