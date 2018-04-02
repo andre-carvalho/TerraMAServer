@@ -2,13 +2,6 @@
 A simple API to receive data from a Ionic app.
 I'am using this technology: https://flask-restful.readthedocs.io/en/latest/quickstart.html#full-example
 
-## Test
-
-After run the server, use the command line to test:
-```
-curl http://127.0.0.1:5000/locations -d '{"description":"teste","lat":-23.121,"lng":-45.231,"datetime":"2018-04-02","photo":"aps897d8907an98ansd98nuasd"}' POST -v -H "Content-Type: application/json"
-```
-
 # Docker file to deploy
 
 This docker is prepared to run a Flesk server used in this project. No has PostgreSQL database service. You need your our SGDB service.
@@ -21,6 +14,10 @@ Your environment to run this docker is the Docker Engine and a PostgreSQL servic
 - [PostgreSQL](https://www.postgresql.org/)
 
 ### Installing
+
+#### Database
+
+Prepare your database using the db.sql script from here: https://raw.githubusercontent.com/andre-carvalho/TerraMAServer/master/api/storage_module/config/db.sql
 
 #### Build your image
 
@@ -61,10 +58,18 @@ docker run -it vita3server sh
 ```
 And just run these commands to create the storage_module/config/db.cfg file setting your values:
 ```sh
-echo "[postgresql]" > storage_module/config/db.cfg
+echo "[database]" > storage_module/config/db.cfg
 echo "host=localhost" >> storage_module/config/db.cfg
 echo "port=5432" >> storage_module/config/db.cfg
-echo "database=bitcointoyou" >> storage_module/config/db.cfg
+echo "database=terramaapp" >> storage_module/config/db.cfg
 echo "user=postgres" >> storage_module/config/db.cfg
 echo "password=postgres" >> storage_module/config/db.cfg
 ```
+
+### Test
+
+After run the server, use the command line to test:
+```
+curl http://127.0.0.1:5000/locations -d '{"description":"teste","lat":-23.121,"lng":-45.231,"datetime":"2018-04-02","photo":"aps897d8907an98ansd98nuasd"}' -v -H "Content-Type: application/json"
+```
+or use a Browser.
