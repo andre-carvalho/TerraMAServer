@@ -6,5 +6,5 @@ I'am using this technology: https://flask-restful.readthedocs.io/en/latest/quick
 
 After run the server, use the command line to test:
 ```
-curl http://127.0.0.1:5000/locations -d "description=teste&lat=-23.121&lng=-45.231&datetime=2018-03-29&photo=aps897d8907an98ansd98nuasd" POST -v -H "Content-Type: application/x-www-form-urlencoded"
+curl http://127.0.0.1:5000/locations -d '{"description":"teste","lat":-23.121,"lng":-45.231,"datetime":"2018-04-02","photo":"aps897d8907an98ansd98nuasd"}' POST -v -H "Content-Type: application/json"
 ```

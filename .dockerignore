@@ -1,0 +1,7 @@
+.vscode
+.git/
+.gitignore
+uploadImages/
+storage_module/config/*.sql
+README.md
+__pycache__/
