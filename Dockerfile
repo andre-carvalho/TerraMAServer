@@ -2,10 +2,10 @@
 #   docker build -t pyapp -f environment/Dockerfile .
 #
 # To run without compose but with shell terminal use this command:
-#   docker run -p 127.0.0.1:5000:5000 -v $PWD/rankservice/src:/usr/local/rankservice/src -it pyapp sh
+#   docker run -p 5000:5000 -v $PWD/rankservice/src:/server -it pyapp sh
 #
 # To run without compose and without shell terminal use this command:
-#   docker run -p 127.0.0.1:5000:5000 -v $PWD/rankservice/src:/usr/local/rankservice/src pyapp
+#   docker run -p 5000:5000 -v $PWD/rankservice/src:/server pyapp
 #
 #--------- Generic stuff all our Dockerfiles should start with so we get caching ------------
 FROM python:3.5-alpine
@@ -35,7 +35,7 @@ RUN apk update \
 
 ENV LIBRARY_PATH=/lib:/usr/lib
 
-ENV INSTALL_PATH /usr/local/terramaserver
+ENV INSTALL_PATH /server
 
 COPY . $INSTALL_PATH/
 
@@ -46,5 +46,8 @@ ENV APP_EXEC=$INSTALL_PATH/api/
 
 EXPOSE 5000
 
+VOLUME ["/server/uploadImages"]
+
 WORKDIR $APP_EXEC
+
 CMD ["python", "server.py"]
