@@ -6,6 +6,7 @@ from storage_module.locations_dao import LocationsDao
 from base64_module.base64_utils import B64Utils
 
 SERVER_IP='0.0.0.0'
+SERVER_DOMAIN='www.terrama2.dpi.inpe.br/vita3'
 IMG_PATH='/uploadImages'
 
 app = Flask(__name__)
@@ -18,11 +19,10 @@ class Locations(Resource):
         try:
             db = LocationsDao()
             id_photo = db.storeLocation(json_data)
-            url_picture = "http://{0}/locations/{1}".format(SERVER_IP, id_photo)
+            url_picture = "http://{0}/locations/{1}".format(SERVER_DOMAIN, id_photo)
             db.updateLocation(id_photo, url_picture)
         except Exception as error:
-            print(error)
-            return 500
+            return {'status': error}, 500
 
         curpath = os.path.abspath(os.curdir) + IMG_PATH
         b64 = B64Utils(curpath, json_data['photo'])
@@ -47,5 +47,5 @@ api.add_resource(LocationsList, '/locations/<location_id>')
 
 
 if __name__ == '__main__':
-     app.run(host=SERVER_IP, port=5000)
+     app.run(host=SERVER_IP, port=5000, debug=True)
      # app.run(debug=True)
