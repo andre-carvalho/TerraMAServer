@@ -18,3 +18,9 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.locations
     OWNER to postgres;
+
+-- Change table to create a new geometry column using srid=4326
+
+CREATE EXTENSION postgis;
+
+SELECT AddGeometryColumn ('public','locations','points',4326,'POINT',2);

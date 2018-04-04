@@ -48,4 +48,3 @@ api.add_resource(LocationsList, '/locations/<location_id>')
 
 if __name__ == '__main__':
      app.run(host=SERVER_IP, port=5000, debug=True)
-     # app.run(debug=True)
