@@ -49,11 +49,11 @@ class LocationsDao:
     """
     def __insert(self, data):
 
-        values = "VALUES ('{0}', {1}, {2}, '{3}', '{4}', ST_SetSRID(ST_MakePoint({2}, {1}), 4326))".format(data['description'],data['lat'],
-        data['lng'],data['datetime'],data['photo'])
+        values = "VALUES ('{0}', {1}, {2}, '{3}', ST_SetSRID(ST_MakePoint({2}, {1}), 4326))".format(data['description'],data['lat'],
+        data['lng'],data['datetime'])
 
         sql = "INSERT INTO public.locations( "
-        sql += "description, lat, lng, datetime, photo_b64, points) "
+        sql += "description, lat, lng, datetime, points) "
         sql += values
         sql += " RETURNING id"
 
