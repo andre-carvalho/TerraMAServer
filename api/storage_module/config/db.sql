@@ -1,14 +1,16 @@
 CREATE DATABASE terramaapp;
 
+CREATE EXTENSION postgis;
+
 CREATE TABLE public.locations
 (
     id serial,
-    description character varying(255),
+    description character varying(255) COLLATE pg_catalog."default",
     lat double precision,
     lng double precision,
-    datetime date,
-    photo_b64 text,
-    picture character varying(255),
+    picture character varying(255) COLLATE pg_catalog."default",
+    datetime timestamp with time zone,
+    points geometry(Point,4326),
     CONSTRAINT pk_locations_id PRIMARY KEY (id)
 )
 WITH (
@@ -16,11 +18,4 @@ WITH (
 )
 TABLESPACE pg_default;
 
-ALTER TABLE public.locations
-    OWNER to postgres;
-
--- Change table to create a new geometry column using srid=4326
-
-CREATE EXTENSION postgis;
-
-SELECT AddGeometryColumn ('public','locations','points',4326,'POINT',2);
+-- ALTER TABLE public.locations OWNER to postgres;

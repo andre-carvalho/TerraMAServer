@@ -49,7 +49,7 @@ class LocationsDao:
     """
     def __insert(self, data):
 
-        values = "VALUES ('{0}', {1}, {2}, to_timestamp('{3}', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"'), ST_SetSRID(ST_MakePoint({2}, {1}), 4326)::point)".format(data['description'],data['lat'],
+        values = "VALUES ('{0}', {1}, {2}, to_timestamp('{3}', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"'), ST_SetSRID(ST_MakePoint({2}, {1}), 4326))".format(data['description'],data['lat'],
         data['lng'],data['datetime'])
 
         sql = "INSERT INTO public.locations( "
