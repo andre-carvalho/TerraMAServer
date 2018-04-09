@@ -46,7 +46,7 @@ ENV APP_EXEC=$INSTALL_PATH/api/
 
 EXPOSE 5000
 
-VOLUME ["/server/uploadImages"]
+VOLUME ["/server/api/uploadImages"]
 
 WORKDIR $APP_EXEC
 
