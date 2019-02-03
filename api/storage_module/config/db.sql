@@ -1,8 +1,6 @@
-CREATE DATABASE terramaapp;
+CREATE EXTENSION IF NOT EXISTS postgis;
 
-CREATE EXTENSION postgis;
-
-CREATE TABLE public.locations
+CREATE TABLE IF NOT EXISTS public.locations
 (
     id serial,
     description character varying(255) COLLATE pg_catalog."default",

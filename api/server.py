@@ -6,7 +6,7 @@ from storage_module.locations_dao import LocationsDao
 from base64_module.base64_utils import B64Utils
 
 SERVER_IP='0.0.0.0'
-SERVER_DOMAIN='www.terrama2.dpi.inpe.br/vita3'
+SERVER_DOMAIN=os.getenv('SERVER_DOMAIN', '127.0.0.1:5000')
 IMG_PATH='/uploadImages'
 
 app = Flask(__name__)

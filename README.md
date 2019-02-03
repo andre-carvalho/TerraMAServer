@@ -1,5 +1,5 @@
 # TerraMAServer
-A simple API to receive data from a Ionic app.
+A simple API to receive data from an Ionic app.
 I'am using this technology: https://flask-restful.readthedocs.io/en/latest/quickstart.html#full-example
 
 # Docker file to deploy
@@ -21,17 +21,20 @@ Prepare your database using the db.sql script from here: https://raw.githubuserc
 
 #### Build your image
 
+You may change the image version before building using the tag_version appended in image name. \
+The command line template is: *docker build -t <image_name>:<tag_version> .*
+
 Run these commands to build your image:
 
 ```sh
 git clone https://github.com/andre-carvalho/TerraMAServer.git
 
-docker build -t vita3server .
+docker build -t attempo-server:v1 -f env/Dockerfile .
 ```
 
 #### Run the container
 
-Just run the image and your service is starting. Note that command use the set env parameters to send the database connection information for vita3server service.
+Just run the image and your service is starting. Note that command use the set env parameters to send the database connection information for API service.
 
 * --env HOST=&lt;your ip or hostname&gt;
 * --env PORT=&lt;port&gt;
@@ -39,14 +42,21 @@ Just run the image and your service is starting. Note that command use the set e
 * --env DBPASS=&lt;secret&gt;
 * --env DBNAME=&lt;database name&gt;
 
+Note: The SERVER_DOMAIN is used to compose the data stored into the database table "Locations" into picture column. This column is used to tell for the TerraMA client the URL for one picture. The default value is "127.0.0.1:5000" and is will be valid only a local test.
+
+* --env SERVER_DOMAIN=&lt;server_domain&gt;
+
 ```sh
-docker run --env HOST=IP --env PORT=5432 --env DBNAME=terramaapp --env DBUSER=postgres --env DBPASS=postgres -d vita3server
+docker run -p 5000:5000 -v /tmp/attempo_docker_files:/server/api/uploadImages \
+--env HOST=IP --env PORT=5432 --env DBNAME=terramaapp --env DBUSER=postgres \
+--env DBPASS=postgres -d attempo-server:v1
 ```
 
 You may run with less parameters, like this:
 
 ```sh
-docker run --env HOST=IP --env DBNAME=dbname --env DBPASS=postgres -d vita3server
+docker run -p 5000:5000 -v /tmp/attempo_docker_files:/server/api/uploadImages \
+--env HOST=IP --env DBNAME=dbname --env DBPASS=postgres -d attempo-server:v1
 ```
 
 Or run docker accessing the terminal and set your connection informations.
@@ -54,7 +64,7 @@ Or run docker accessing the terminal and set your connection informations.
 To procced that, you may run the docker:
 
 ```sh
-docker run -it vita3server sh
+docker run -it attempo-server:v1 sh
 ```
 And just run these commands to create the storage_module/config/db.cfg file setting your values:
 ```sh
@@ -64,6 +74,12 @@ echo "port=5432" >> storage_module/config/db.cfg
 echo "database=terramaapp" >> storage_module/config/db.cfg
 echo "user=postgres" >> storage_module/config/db.cfg
 echo "password=postgres" >> storage_module/config/db.cfg
+```
+
+You may use the docker compose to that task:
+
+```sh
+docker compose up
 ```
 
 ### Test
