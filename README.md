@@ -78,8 +78,15 @@ echo "password=postgres" >> storage_module/config/db.cfg
 
 You may use the docker compose to that task:
 
+The compose file is in env directory.
+*env/docker-compose.yml*
+
+
+Note: see this link to read about docker-compose: https://docs.docker.com/compose/overview/
+
 ```sh
-docker compose up
+# to run compose
+docker-compose -f env/docker-compose.yml up -d
 ```
 
 ### Test
