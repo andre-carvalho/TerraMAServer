@@ -4,10 +4,11 @@ from flask_restful import reqparse, abort, Api, Resource
 from flask_cors import CORS
 from storage_module.locations_dao import LocationsDao
 from base64_module.base64_utils import B64Utils
+from logs_module.log_writer import logWriter
 
 SERVER_IP='0.0.0.0'
 SERVER_DOMAIN=os.getenv('SERVER_DOMAIN', '127.0.0.1:5000')
-IMG_PATH='/uploadImages'
+DATA_PATH='/uploadImages'
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
@@ -22,9 +23,11 @@ class Locations(Resource):
             url_picture = "http://{0}/locations/{1}".format(SERVER_DOMAIN, id_photo)
             db.updateLocation(id_photo, url_picture)
         except Exception as error:
-            return {'status': error}, 500
+            error_msg = 'error in Locations class when trying store posted data. Return HTTP:500'
+            logWriter(os.path.abspath(os.curdir) + DATA_PATH).write(error_msg)
+            return {'status': 'database error'}, 500
 
-        curpath = os.path.abspath(os.curdir) + IMG_PATH
+        curpath = os.path.abspath(os.curdir) + DATA_PATH
         b64 = B64Utils(curpath, json_data['photo'])
         b64.writeToBinary(id_photo)
         
@@ -33,11 +36,13 @@ class Locations(Resource):
 class LocationsList(Resource):
      def get(self, location_id):
         
-        curpath = os.path.abspath(os.curdir) + IMG_PATH
+        curpath = os.path.abspath(os.curdir) + DATA_PATH
         b64 = B64Utils(curpath)
         try:
             imageio,attach,mime = b64.readFromBinary(location_id)
         except Exception as error:
+            error_msg = 'error in LocationsList class when trying load picture({0}) from disk. Return HTTP:404'.format(location_id)
+            logWriter(os.path.abspath(os.curdir) + DATA_PATH).write(error_msg)
             return 404
         return send_file(imageio, attachment_filename=attach, mimetype=mime)
 
