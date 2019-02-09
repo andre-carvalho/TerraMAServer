@@ -2,8 +2,8 @@ version: '2'
 
 services:
   attempo-server:
-    image: 'softwarevale/mobile-server:v1'
-    restart: 'always'
+    image: 'softwarevale/mobile-server:v2'
+    restart: on-failure
     ports:
     - "5000:5000"
     environment:
