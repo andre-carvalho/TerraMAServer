@@ -87,6 +87,9 @@ Note: see this link to read about docker-compose: https://docs.docker.com/compos
 ```sh
 # to run compose
 docker-compose -f env/docker-compose.yml up -d
+
+# to stop compose
+docker-compose -f env/docker-compose.yml down
 ```
 
 ### Test
