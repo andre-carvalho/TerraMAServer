@@ -1,6 +1,6 @@
 aniso8601==3.0.0
 click==6.7
-Flask==0.12.2
+Flask==0.12.3
 Flask-Cors==3.0.3
 Flask-RESTful==0.3.6
 itsdangerous==0.24
@@ -9,7 +9,7 @@ MarkupSafe==1.0
 Pillow==5.0.0
 psycopg2-binary==2.7.4
 pytz==2018.3
-requests==2.9.1
+requests==2.20.0
 six==1.11.0
-urllib3==1.13.1
+urllib3==1.23
 Werkzeug==0.14.1
