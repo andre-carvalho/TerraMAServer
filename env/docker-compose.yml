@@ -5,13 +5,19 @@ services:
     image: 'softwarevale/mobile-server:v2'
     restart: on-failure
     ports:
-    - "5000:5000"
+      - "80:5000"
+    networks:
+      - terrama2_net 
     environment:
-      HOST: 192.168.1.121
+      HOST: 10.142.0.2
       PORT: 5432
       DBUSER: postgres
-      DBPASS: postgres
-      DBNAME: attempo
-      SERVER_DOMAIN: '127.0.0.1:5000'
+      DBPASS: mysecretpassword
+      DBNAME: attempo_mobile
+      SERVER_DOMAIN: '35.231.50.207'
     volumes:
-      - '/tmp/attempo_docker_files:/server/utils/uploadImages'
+      - '/data/mobile/attempo_files:/server/utils/uploadImages'
+
+networks:
+  terrama2_net:
+    external: true
