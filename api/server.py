@@ -16,7 +16,18 @@ api = Api(app)
 
 class Locations(Resource):
     def post(self):
-        json_data = request.get_json(force=True)
+        # set default
+        json_data=None
+
+        # Trying parse the input JSON
+        try:
+            json_data = request.get_json(force=True)
+        except Exception as error:
+            error_msg = 'error in Locations class when trying parse input JSON data. Return HTTP:500'
+            logWriter(os.path.abspath(os.curdir) + DATA_PATH).write(error_msg)
+            return {'status': 'parse error'}, 500
+        
+        # trying store data into database
         try:
             db = LocationsDao()
             id_photo = db.storeLocation(json_data)
@@ -27,9 +38,15 @@ class Locations(Resource):
             logWriter(os.path.abspath(os.curdir) + DATA_PATH).write(error_msg)
             return {'status': 'database error'}, 500
 
-        curpath = os.path.abspath(os.curdir) + DATA_PATH
-        b64 = B64Utils(curpath, json_data['photo'])
-        b64.writeToBinary(id_photo)
+        # trying write picture to disk
+        try:
+            curpath = os.path.abspath(os.curdir) + DATA_PATH
+            b64 = B64Utils(curpath, json_data['photo'])
+            b64.writeToBinary(id_photo)
+        except Exception as error:
+            error_msg = 'error in Locations class when trying write picture to disk. Return HTTP:500'
+            logWriter(os.path.abspath(os.curdir) + DATA_PATH).write(error_msg)
+            return {'status': 'IO error'}, 500
         
         return {'status':'completed'}, 201
 
@@ -38,6 +55,8 @@ class LocationsList(Resource):
         
         curpath = os.path.abspath(os.curdir) + DATA_PATH
         b64 = B64Utils(curpath)
+
+        # trying read picture from disk
         try:
             imageio,attach,mime = b64.readFromBinary(location_id)
         except Exception as error:
@@ -52,4 +71,4 @@ api.add_resource(LocationsList, '/locations/<location_id>')
 
 
 if __name__ == '__main__':
-     app.run(host=SERVER_IP, port=5000, debug=True)
+     app.run(host=SERVER_IP, port=5000)

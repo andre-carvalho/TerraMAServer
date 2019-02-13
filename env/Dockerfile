@@ -1,18 +1,18 @@
 # To build image for this dockerfile use this command:
-#   docker build -t attempo-server:v2 -f env/Dockerfile .
+#   docker build -t softwarevale/mobile-server:v3 -f env/Dockerfile .
 #
 # To run without compose but with shell terminal use this command:
-#   docker run -p 80:5000 --name tma-attempo-server --rm -v /tmp/docker_server:/server -it attempo-server:v1 sh
+#   docker run -p 8081:8000 --name tma-attempo-server --rm -v /data/mobile/attempo_files:/server/utils/uploadImages -it softwarevale/mobile-server:v3 sh
 #
 # To run without compose and without shell terminal use this command:
-#   docker run -p 80:5000 --name tma-attempo-server --rm -v /tmp/docker_server:/server -d attempo-server:v1
+#   docker run -p 8081:8000 --name tma-attempo-server --rm -v /data/mobile/attempo_files:/server/utils/uploadImages -d softwarevale/mobile-server:v3
 #
 #--------- Generic stuff all our Dockerfiles should start with so we get caching ------------
-FROM python:3.5-alpine
+FROM python:3.6-alpine
 
 LABEL "br.inpe.dpi"="INPE/DPI-TerraMA" \
 br.inpe.dpi.terrama="microservice" \
-version="0.2" \
+version="0.3" \
 author="Andre Carvalho" \
 author.email="andre-carvalho@inpe.br" \
 description="This microservice receive image \
@@ -23,7 +23,7 @@ ENV PYTHONUNBUFFERED 1
 #-------------Application Specific Stuff ----------------------------------------------------
 
 RUN apk update \
-  && apk add \
+  && apk add --no-cache --update \
     build-base \
     postgresql \
     postgresql-dev \
@@ -31,7 +31,10 @@ RUN apk update \
     python-dev \
     py-pip \
     jpeg-dev \
-    zlib-dev
+    zlib-dev \
+    tzdata
+
+ENV TZ=America/Sao_Paulo
 
 ENV LIBRARY_PATH=/lib:/usr/lib
 
@@ -46,17 +49,18 @@ RUN pip install -r $INSTALL_PATH/utils/requirements.txt
 # Set permission to exec
 # RUN chmod +x ${INSTALL_PATH}/utils/prepare_db.sh
 
-ENV APP_EXEC=$INSTALL_PATH/utils/
-
-EXPOSE 5000
+EXPOSE 8000
 
 VOLUME ["/server/utils/uploadImages"]
 
-WORKDIR $APP_EXEC
+WORKDIR $INSTALL_PATH
+
+# new way using the gunicorn as a WSGI server
+CMD ["gunicorn", "-D", "--workers", "4", "--bind", "0.0.0.0:8000", "wsgi:app"]
 
 # Start service using a shell script. Try create postgis extension and table into target database.
 # I thing that this way of starting service is wrong. Locked the service after some time.
 #ENTRYPOINT ./prepare_db.sh
 
 # The regular way is better, i think
-CMD ["python", "/server/api/server.py"]
+#CMD ["python", "/server/api/server.py"]

@@ -2,10 +2,10 @@ version: '2'
 
 services:
   attempo-server:
-    image: 'softwarevale/mobile-server:v2'
+    image: 'softwarevale/mobile-server:v3'
     restart: on-failure
     ports:
-      - "80:5000"
+      - "8081:8000"
     networks:
       - terrama2_net 
     environment:
