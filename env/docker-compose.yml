@@ -5,7 +5,7 @@ services:
     image: 'softwarevale/mobile-server:v3'
     restart: on-failure
     ports:
-      - "8081:8000"
+      - "8085:8000"
     networks:
       - terrama2_net 
     environment:
@@ -16,7 +16,7 @@ services:
       DBNAME: attempo_mobile
       SERVER_DOMAIN: '35.231.50.207'
     volumes:
-      - '/data/mobile/attempo_files:/server/utils/uploadImages'
+      - '/data/mobile/attempo_files:/server/api/uploadImages'
 
 networks:
   terrama2_net:
