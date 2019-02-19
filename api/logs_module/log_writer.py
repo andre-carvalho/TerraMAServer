@@ -11,7 +11,7 @@ class logWriter:
 
         path = self.path + '/' + self.filename
 
-        log_file = open(path,'w')
+        log_file = open(path,'a')
         msg = msg+'\n'
         log_file.write(msg)
         log_file.close()

@@ -46,21 +46,11 @@ COPY utils $INSTALL_PATH/utils
 # Install Python requirements
 RUN pip install -r $INSTALL_PATH/utils/requirements.txt
 
-# Set permission to exec
-# RUN chmod +x ${INSTALL_PATH}/utils/prepare_db.sh
-
 EXPOSE 8000
 
-VOLUME ["/server/utils/uploadImages"]
+VOLUME ["/server/api/uploadImages"]
 
-WORKDIR $INSTALL_PATH
+WORKDIR $INSTALL_PATH/api
 
 # new way using the gunicorn as a WSGI server
-CMD ["gunicorn", "-D", "--workers", "4", "--bind", "0.0.0.0:8000", "wsgi:app"]
-
-# Start service using a shell script. Try create postgis extension and table into target database.
-# I thing that this way of starting service is wrong. Locked the service after some time.
-#ENTRYPOINT ./prepare_db.sh
-
-# The regular way is better, i think
-#CMD ["python", "/server/api/server.py"]
+CMD ["gunicorn", "--workers=4", "--bind=0.0.0.0:8000", "wsgi:app"]
