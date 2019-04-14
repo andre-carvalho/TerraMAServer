@@ -18,7 +18,7 @@ class ConfigDB:
             # get connection params from env vars
             host = os.getenv('HOST', 'localhost')
             port = os.getenv('PORT', 5432)
-            database = os.getenv('DBNAME', 'deter_beta')
+            database = os.getenv('DBNAME', 'observations')
             username = os.getenv('DBUSER', 'postgres')
             password = os.getenv('DBPASS', 'postgres')
             with open(config_file, "w") as configfile:
