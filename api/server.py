@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from flask_cors import CORS
 from storage_module.locations_dao import LocationsDao
 from logs_module.log_writer import logWriter
+from authorization.api_client import APIClient
 
 UPLOAD_FOLDER = '/uploadImages'
 LOG_PATH='/logs'
@@ -27,9 +28,37 @@ class PhotoInput(Resource):
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     
     def post(self):
+        # check if Authorization header is present and if it is valid
+        request.headers.get('Authorization')
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            try:
+                auth_token = auth_header.split(" ")[1]
+                 # call the Authentication API
+                #oAuth = APIClient(SERVER_DOMAIN)
+                oAuth = APIClient("192.168.1.121:8000")
+                auth=oAuth.tokenValidation(auth_token)
+                if auth is None:
+                    responseObject = {
+                        'status': 'fail',
+                        'message': 'Unauthorized'
+                    }
+                    return responseObject, 401
+            except IndexError:
+                responseObject = {
+                    'status': 'fail',
+                    'message': 'Bearer token malformed.'
+                }
+                return responseObject, 401
+        else:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Missing token.'
+            }
+            return responseObject, 401
         # check if the post request has the file part
         print(request.files)
-        if 'file' not in request.files:# or 'json_data' not in request.form:
+        if 'file' not in request.files:
             # No file part
             error_msg = 'Error in PhotoUpload class when trying test the file part from request. Return HTTP:500'
             logWriter(os.path.abspath(os.curdir) + LOG_PATH).write(error_msg)
@@ -42,7 +71,7 @@ class PhotoInput(Resource):
             json_data = request.form['json_data']
             # parse JSON:
             aJson = json.loads(json_data)
-            user_id = aJson["user_id"]
+            user_id = str(aJson["userid"])
         
         # if user does not select file, browser also
         # submit an empty part without filename

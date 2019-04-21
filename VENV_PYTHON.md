@@ -31,3 +31,10 @@ gunicorn -w 1 -b 127.0.0.1:5000 wsgi:app
 # this will start in port: 8000
 gunicorn -w 1 wsgi:app
 ```
+
+
+Or use the no-sendfile to fix this behaviour.
+
+```sh
+gunicorn -k eventlet --no-sendfile -w 1 -b 0.0.0.0:5000 wsgi:app
+```

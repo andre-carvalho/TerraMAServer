@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS public.locations
     description character varying(255) COLLATE pg_catalog."default",
     lat double precision,
     lng double precision,
+    userid integer,
+    normalized boolean,
     picture character varying(255) COLLATE pg_catalog."default",
     datetime timestamp with time zone,
     points geometry(Point,4326),
