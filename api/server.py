@@ -36,7 +36,7 @@ class PhotoInput(Resource):
                 auth_token = auth_header.split(" ")[1]
                  # call the Authentication API
                 #oAuth = APIClient(SERVER_DOMAIN)
-                oAuth = APIClient("192.168.1.121:8000")
+                oAuth = APIClient("192.168.1.121:5000")
                 auth=oAuth.tokenValidation(auth_token)
                 if auth is None:
                     responseObject = {
@@ -115,8 +115,8 @@ class PhotoOutput(Resource):
             return {'status': 'file not found'}, 404
 
 # receive the JSON data together pictures
-api.add_resource(PhotoInput, '/locations')
-api.add_resource(PhotoOutput, '/locations/<user_id>/<filename>')
+api.add_resource(PhotoInput, '/occurrences')
+api.add_resource(PhotoOutput, '/occurrences/<user_id>/<filename>')
 
 
 if __name__ == '__main__':
