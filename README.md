@@ -66,6 +66,14 @@ echo "user=postgres" >> storage_module/config/db.cfg
 echo "password=postgres" >> storage_module/config/db.cfg
 ```
 
+### Docker compose
+
+For more easy way to run, using the docker-compose.yaml
+
+```sh
+docker-compose up -d
+```
+
 ### Test
 
 After run the server, use the command line to test:
