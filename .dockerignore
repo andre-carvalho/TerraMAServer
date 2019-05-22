@@ -1,7 +1,9 @@
 .vscode
 .git/
 .gitignore
-uploadImages/
-storage_module/config/*.sql
+/uploadImages/
+/storage_module/config/*.sql
 README.md
+docker-compose.yaml
 __pycache__/
+/env
