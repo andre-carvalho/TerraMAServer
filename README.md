@@ -4,7 +4,7 @@ I'am using this technology: https://flask-restful.readthedocs.io/en/latest/quick
 
 # Docker file to deploy
 
-This docker is prepared to run a Flesk server used in this project. No has PostgreSQL database service. You need your our SGDB service.
+This docker is prepared to run a Flask server used in this project. No has PostgreSQL database service. You need your our SGDB service.
 
 ### Prerequisites
 
@@ -70,6 +70,6 @@ echo "password=postgres" >> storage_module/config/db.cfg
 
 After run the server, use the command line to test:
 ```
-curl http://127.0.0.1:5000/locations -d '{"description":"teste","lat":-23.121,"lng":-45.231,"datetime":"2018-04-02","photo":"aps897d8907an98ansd98nuasd"}' -v -H "Content-Type: application/json"
+curl http://127.0.0.1:80/locations -d '{"description":"teste","lat":-23.121,"lng":-45.231,"datetime":"2018-04-02","photo":"/9j/4AAQSkZJRgABAQEASABIAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wgARCAAGAAoDAREAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAgX/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/aAAwDAQACEAMQAAABqIa//8QAFxABAAMAAAAAAAAAAAAAAAAAAAESIv/aAAgBAQABBQKsMv/EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8BP//EABYRAQEBAAAAAAAAAAAAAAAAAAABEf/aAAgBAgEBPwFlf//EABUQAQEAAAAAAAAAAAAAAAAAAAAx/9oACAEBAAY/Aoj/xAAXEAEAAwAAAAAAAAAAAAAAAAAAEWHw/9oACAEBAAE/IaTMP//aAAwDAQACAAMAAAAQq//EABYRAQEBAAAAAAAAAAAAAAAAAAARAf/aAAgBAwEBPxCLj//EABYRAAMAAAAAAAAAAAAAAAAAAAEQEf/aAAgBAgEBPxClH//EABYQAQEBAAAAAAAAAAAAAAAAAABx8f/aAAgBAQABPxDDSP/Z"}' -v -H "Content-Type: application/json"
 ```
 or use a Browser.

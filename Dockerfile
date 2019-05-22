@@ -1,11 +1,11 @@
 # To build image for this dockerfile use this command:
-#   docker build -t pyapp -f environment/Dockerfile .
+#   docker build -t softwarevale/vita3server:0.1 .
 #
 # To run without compose but with shell terminal use this command:
-#   docker run -p 5000:5000 -v $PWD/rankservice/src:/server -it pyapp sh
+#   docker run -p 5000:5000 -v $PWD/api/storage_module/config:/server/api/storage_module/config -it softwarevale/vita3server:0.1 sh
 #
 # To run without compose and without shell terminal use this command:
-#   docker run -p 5000:5000 -v $PWD/rankservice/src:/server pyapp
+#   docker run -p 5000:5000 -v $PWD/api/storage_module/config:/server/api/storage_module/config softwarevale/vita3server:0.1
 #
 #--------- Generic stuff all our Dockerfiles should start with so we get caching ------------
 FROM python:3.5-alpine
@@ -14,8 +14,8 @@ LABEL "br.inpe.dpi"="INPE/DPI-TerraMA" \
 br.inpe.dpi.terrama="microservice" \
 version="0.1" \
 author="Andre Carvalho" \
-author.email="carvalho@dpi.inpe.br" \
-description="This microservice receive image \
+author.email="andre.carvalho@inpe.br" \
+description="This microservice receive an image \
 files through upload from an Ionic app and provide \
 access of those images over a REST API."
 
@@ -46,7 +46,7 @@ ENV APP_EXEC=$INSTALL_PATH/api/
 
 EXPOSE 5000
 
-VOLUME ["/server/api/uploadImages"]
+VOLUME ["/server/api/storage_module/config", "/server/api/uploadImages"]
 
 WORKDIR $APP_EXEC
 

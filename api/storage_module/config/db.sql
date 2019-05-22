@@ -1,4 +1,4 @@
-CREATE DATABASE terramaapp;
+﻿-- CREATE DATABASE terramaapp;
 
 CREATE EXTENSION postgis;
 

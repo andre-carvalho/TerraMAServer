@@ -1,0 +1,11 @@
+version: "2"
+services:
+  mobile-upload-occurrence:
+    container_name: mobile-upload-occurrence
+    image: softwarevale/vita3server:0.1
+    volumes:
+      - /data/mobile-upload-occurrence/config:/server/api/storage_module/config
+      - /data/mobile-upload-occurrence/images:/server/api/uploadImages
+    ports:
+     - "80:5000"
+    restart: on-failure
